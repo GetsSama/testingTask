@@ -1,9 +1,6 @@
 package com.gridnine.testing;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /*
  Билдер собирает сет правил в зависимости от того, какой результат ему выдаст
@@ -15,9 +12,15 @@ class RuleSetBuilder {
     private List<String> previousRules;
     public RuleSetBuilder(){};
 
+
     //Полное построение сета "с нуля"
     private void buildNewRuleSet(List<String> rules) {
+        Objects.requireNonNull(rules);
+        if (!rulesSet.isEmpty())
+            rulesSet.clear();
 
+        for(String rule : rules)
+            addRule(rule);
     }
 
     //Добавление одного правила в сет
@@ -25,9 +28,19 @@ class RuleSetBuilder {
          rulesSet.add(RuleFactory.getRule(ruleName));
     }
 
-    //Метод, меняющий текущий сет по мапе различий
-    private void changeRuleSet(Map<String,String> changeMap){
+    private void removeRule(String ruleName) {
+        rulesSet.remove(RuleFactory.getRule(ruleName));
+    }
 
+    //Метод, меняющий текущий сет по мапе различий
+    private void changeRuleSet(Map<String,Boolean> changeMap) {
+        for (Map.Entry pair : changeMap.entrySet()){
+            if ((boolean) pair.getValue()) {
+                addRule((String) pair.getKey());
+            } else {
+                removeRule((String) pair.getKey());
+            }
+        }
     }
 
     //Основной метод, возвращающий корректный сет правил
@@ -62,16 +75,47 @@ class RuleSetBuilder {
 (заменить на это, добавить, удалить)
  */
 class BuilderController {
-    private static double criticalValue;
+    private static final double criticalValue = 0.3;
     private BuilderController(){};
     public static boolean isRulesEquals(List<String> previousRules, List<String> newRules) {
-        return true;
+        Objects.requireNonNull(previousRules);
+        Objects.requireNonNull(newRules);
+        return previousRules == newRules ? true : previousRules.equals(newRules);
     }
 
     public static boolean doNeedBuildNewSet(List<String> previousRules, List<String> newRules) {
-        return true;
+        Objects.requireNonNull(previousRules);
+        Objects.requireNonNull(newRules);
+        int prevSize = previousRules.size();
+        int newSize = newRules.size();
+        int countChanges = 0;
+        Set<String> newRulesSet = new HashSet<>(newRules);
+
+        for (String prevRule : previousRules){
+            if (!newRulesSet.contains(prevRule))
+                countChanges++;
+        }
+
+        return Double.compare(criticalValue, prevSize/countChanges)<=0;
     }
-    public static Map<String, String> getChangeMap(List<String> previousRules, List<String> newRules) {
-        return null;
+    public static Map<String, Boolean> getChangeMap(List<String> previousRules, List<String> newRules) {
+        Objects.requireNonNull(previousRules);
+        Objects.requireNonNull(newRules);
+        int prevSize = previousRules.size();
+        int newSize = newRules.size();
+        Map<String, Boolean> changeMap = new HashMap<>(Math.max(prevSize, newSize));
+        Set<String> newRulesSet = new HashSet<>(newRules);
+
+        for (String prevRule : previousRules) {
+            if (newRulesSet.contains(prevRule))
+                newRulesSet.remove(prevRule);
+            else
+                changeMap.put(prevRule, false);
+        }
+
+        for (String addRule : newRulesSet)
+            changeMap.put(addRule, true);
+
+        return changeMap;
     }
 }
