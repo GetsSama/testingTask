@@ -27,7 +27,6 @@ public class FlightFilter {
                 filteredList.add(flight);
         }
 
-        flights = filteredList;
         return filteredList;
     }
 }
