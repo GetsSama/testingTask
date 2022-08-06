@@ -7,8 +7,7 @@ import java.util.*;
  контроллер.
 */
 class RuleSetBuilder {
-    private Set<Rule> rulesSet;
-    private long numberOfRules;
+    private Set<Rule> rulesSet = new HashSet<>();
     private List<String> previousRules;
     public RuleSetBuilder(){};
 

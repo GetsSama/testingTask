@@ -9,5 +9,9 @@ public class Main {
         List<String> rules = Arrays.asList("DepartureBeforeNow");
         System.out.println(flights);
 
+        FlightFilter filter1 = new FlightFilter();
+        //filter1.filter(flights, rules);
+        System.out.println(filter1.filter(flights, rules));
+        System.out.println(flights);
     }
 }

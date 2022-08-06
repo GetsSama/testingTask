@@ -11,11 +11,9 @@ class RuleFactory {
     public static Rule getRule(String ruleName) {
         switch (ruleCases.get(ruleName)){
             case 1:
-                DepartureBeforeNow.getInstance();
-                break;
+                return DepartureBeforeNow.getInstance();
             default:
                 throw new IllegalArgumentException("There is no such rule!");
         }
-        return null;
     }
 }
