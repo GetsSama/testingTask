@@ -65,6 +65,21 @@ class Flight {
         return segments.stream().map(Object::toString)
             .collect(Collectors.joining(" "));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Flight)) return false;
+
+        Flight flight = (Flight) o;
+
+        return Objects.equals(segments, flight.segments);
+    }
+
+    @Override
+    public int hashCode() {
+        return segments != null ? segments.hashCode() : 0;
+    }
 }
 
 /**
@@ -94,5 +109,22 @@ class Segment {
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         return '[' + departureDate.format(fmt) + '|' + arrivalDate.format(fmt)
             + ']';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Segment)) return false;
+
+        Segment segment = (Segment) o;
+
+        return this.toString().equals(segment.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = departureDate != null ? departureDate.hashCode() : 0;
+        result = 31 * result + (arrivalDate != null ? arrivalDate.hashCode() : 0);
+        return result;
     }
 }
