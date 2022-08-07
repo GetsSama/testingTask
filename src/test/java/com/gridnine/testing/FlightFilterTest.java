@@ -30,7 +30,7 @@ class FlightFilterTest {
         List<Flight> expectedList = new ArrayList<>(FlightBuilder.createFlights());
         String rule1 = "DepartureBeforeNow";
         String rule2 = "ArrivedBeforeDeparture";
-        String rule3 = "EarthTimeLess";
+        String rule3 = "EarthTimeLess 2";
         FlightFilter testedFilter = new FlightFilter(reportedList);
         assertEquals(expectedList, testedFilter.getFilteredList());
 

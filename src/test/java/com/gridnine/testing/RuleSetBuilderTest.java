@@ -14,7 +14,7 @@ class RuleSetBuilderTest {
 
     @Test
     void methodGetSetOfRuleReturnCorrect(){
-        List<String> rules = Arrays.asList("DepartureBeforeNow", "ArrivedBeforeDeparture", "EarthTimeLess");
+        List<String> rules = Arrays.asList("DepartureBeforeNow", "ArrivedBeforeDeparture", "EarthTimeLess 2");
         Set<Rule> expectedSet = new HashSet<>(Arrays.asList(DepartureBeforeNow.getInstance(),
                                                          ArrivedBeforeDeparture.getInstance(),
                                                          EarthTimeLess.getInstance("2")));

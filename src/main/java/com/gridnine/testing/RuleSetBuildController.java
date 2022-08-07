@@ -9,6 +9,8 @@ import java.util.*;
 class RuleSetBuilder {
     private Set<Rule> rulesSet = new HashSet<>();
     private List<String> previousRules;
+
+    private RuleFactory ruleFactory = RuleFactoryManager.getInstance();
     public RuleSetBuilder(){};
 
 
@@ -24,12 +26,12 @@ class RuleSetBuilder {
 
     //Добавление одного правила в сет
     private void addRule(String ruleName) {
-         rulesSet.add(RuleFactory.getRule(ruleName));
+         rulesSet.add(ruleFactory.getRule(ruleName));
     }
 
     //Удаление одного правила из сета
     private void removeRule(String ruleName) {
-        rulesSet.remove(RuleFactory.getRule(ruleName));
+        rulesSet.remove(ruleFactory.getRule(ruleName));
     }
 
     //Метод, меняющий текущий сет по мапе различий

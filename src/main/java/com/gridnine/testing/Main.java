@@ -8,7 +8,7 @@ public class Main {
         List<Flight> flights = FlightBuilder.createFlights();
         String rule1 = "DepartureBeforeNow";
         String rule2 = "ArrivedBeforeDeparture";
-        String rule3 = "EarthTimeLess";
+        String rule3 = "EarthTimeLess 2";
 
         System.out.println(flights);
 
