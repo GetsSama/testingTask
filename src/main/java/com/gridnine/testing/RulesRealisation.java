@@ -4,6 +4,13 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.List;
 
+/**
+ * Реализация объектов правил, которые потребляет фильтр.
+ */
+interface Rule {
+    public boolean isAcceptRule (Flight flight);
+}
+
 //Класс-шаблон для простых правил
 abstract class SimpleRuleImpl implements Rule {
     private String name;
@@ -14,7 +21,6 @@ abstract class SimpleRuleImpl implements Rule {
     public abstract boolean isAcceptRule(Flight flight);
     @Override
     public int hashCode() {
-        System.out.println(this.name);
         return this.name.hashCode();
     }
     @Override
@@ -36,7 +42,6 @@ abstract class AttributedRule implements Rule {
 
     @Override
     public int hashCode() {
-        System.out.println(name + " attr: " + attribute);
         return attribute.hashCode();
     }
 
@@ -52,7 +57,7 @@ abstract class AttributedRule implements Rule {
 
 
 /*
-    Реализации правил:
+    Реализация правил:
     Если правило исключающее, метод isAcceptRule должен возвращать семнатически обратное значение,
     если правило совпадает семантически с методом isAcceptRule, то он должен возвращать прямое значение.
 */

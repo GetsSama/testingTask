@@ -3,8 +3,7 @@ package com.gridnine.testing;
 import java.util.*;
 
 /*
- Билдер собирает сет правил в зависимости от того, какой результат ему выдаст
- контроллер.
+ Билдер собирает сет правил в зависимости от того, какой результат ему выдаст BuilderController.
 */
 class RuleSetBuilder {
     private Set<Rule> rulesSet = new HashSet<>();
