@@ -102,7 +102,9 @@ class ArrivedBeforeDeparture extends SimpleRuleImpl{
 class EarthTimeLess extends AttributedRule{
     private EarthTimeLess(String hours){super(hours);}
     public static Rule getInstance(String attribute){
-        return new EarthTimeLess(Objects.requireNonNull(attribute));
+        if (Integer.parseInt(Objects.requireNonNull(attribute)) <= 0)
+            throw new IllegalArgumentException();
+        return new EarthTimeLess(attribute);
     }
     @Override
     public boolean isAcceptRule(Flight flight) {
