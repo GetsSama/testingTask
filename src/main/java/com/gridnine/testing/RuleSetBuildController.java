@@ -71,7 +71,7 @@ class RuleSetBuilder {
 Контроллер сравнивает новые и старые правила методом isRulesEquals - если листы правил идентичны, вернет true, иначе false;
 Метод doNeedBuildNewSet решает, нужно ли построить полностью новый сет правил или нет.
 Метод getDifferenceMap возвращает мапу различий: ключи - различия, значения - действие которое нужно сделать
-(заменить на это, добавить, удалить)
+(добавить - true, удалить - false)
  */
 class BuilderController {
     private static final double criticalValue = 0.3;
