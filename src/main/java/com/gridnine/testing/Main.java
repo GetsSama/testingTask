@@ -12,9 +12,9 @@ public class Main {
 
         System.out.println(flights);
 
-        FlightFilter filter1 = new FlightFilter();
+        FlightFilter filter1 = new FlightFilter(flights);
 
-        System.out.println(filter1.filter(flights, Arrays.asList(rule1, rule2, rule3)));
+        System.out.println(filter1.filter(rule1).filter(rule2).filter(rule3).getFilteredList());
         //System.out.println(filter1.filter(flights, Arrays.asList(rule2)));
         //System.out.println(filter1.filter(flights, Arrays.asList(rule3)));
     }

@@ -1,16 +1,17 @@
 package com.gridnine.testing;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FlightFilter {
     private final RuleSetBuilder setBuilder = new RuleSetBuilder();
     private Set<Rule> rulesSet;
+    private List<Flight> flightsList;
 
-    public FlightFilter(){};
+    public FlightFilter(List<Flight> flights){
+        Objects.requireNonNull(flights);
+        this.flightsList = flights;
+    };
 
     private boolean validateOne(Flight flight){
         /*for (Rule rule : rulesSet) {
@@ -24,17 +25,29 @@ public class FlightFilter {
         return true;
     }
 
-    public List<Flight> filter(List<Flight> flights, List<String> rules){
-        ArrayList<Flight> multiFlights = new ArrayList<>(flights);
-        List<Flight> filteredList;
-        rulesSet = setBuilder.getSetOfRule(rules);
+    public List<Flight> getFilteredList(){
+        return flightsList;
+    }
 
+    public FlightFilter filter(String... rules){
+        Objects.requireNonNull(rules);
+        List<String> rulesList = Arrays.asList(rules);
+        rulesSet = setBuilder.getSetOfRule(rulesList);
+        ArrayList<Flight> multipleList = new ArrayList<>(flightsList);
         /*for (Flight flight : flights){
             if (validateOne(flight))
                 filteredList.add(flight);
         }*/
-        filteredList = multiFlights.parallelStream().filter(flight -> validateOne(flight)).sequential().collect(Collectors.toCollection(LinkedList::new));
+        flightsList = multipleList.parallelStream().filter(flight -> validateOne(flight)).sequential().collect(Collectors.toCollection(LinkedList::new));
 
-        return filteredList;
+        return this;
+    }
+
+    public FlightFilter filter(List<String> rules){
+        rulesSet = setBuilder.getSetOfRule(rules);
+        ArrayList<Flight> multipleList = new ArrayList<>(flightsList);
+        flightsList = multipleList.parallelStream().filter(flight -> validateOne(flight)).sequential().collect(Collectors.toCollection(LinkedList::new));
+
+        return this;
     }
 }

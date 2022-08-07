@@ -27,6 +27,7 @@ class RuleSetBuilder {
          rulesSet.add(RuleFactory.getRule(ruleName));
     }
 
+    //Удаление одного правила из сета
     private void removeRule(String ruleName) {
         rulesSet.remove(RuleFactory.getRule(ruleName));
     }
@@ -89,13 +90,22 @@ class BuilderController {
         int newSize = newRules.size();
         int countChanges = 0;
         Set<String> newRulesSet = new HashSet<>(newRules);
+        Set<String> previousRulesSet = new HashSet<>(previousRules);
 
-        for (String prevRule : previousRules){
-            if (!newRulesSet.contains(prevRule))
-                countChanges++;
+        if (prevSize >= newSize) {
+            for (String prevRule : previousRules){
+                if (!newRulesSet.contains(prevRule))
+                    countChanges++;
+            }
+            return Double.compare(criticalValue, ((double) countChanges)/prevSize)<=0;
+        } else {
+            for (String newRule : newRules){
+                if (!previousRulesSet.contains(newRule))
+                    countChanges++;
+            }
+            return Double.compare(criticalValue, ((double) countChanges)/newSize)<=0;
         }
 
-        return Double.compare(criticalValue, prevSize/countChanges)<=0;
     }
     public static Map<String, Boolean> getChangeMap(List<String> previousRules, List<String> newRules) {
         Objects.requireNonNull(previousRules);

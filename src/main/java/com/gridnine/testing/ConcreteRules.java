@@ -43,7 +43,7 @@ abstract class AttributedRule implements Rule {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof AttributedRule)
-            this.attribute.equals(((AttributedRule) obj).attribute);
+           return this.attribute.equals(((AttributedRule) obj).attribute);
         return false;
     }
     @Override
