@@ -8,7 +8,7 @@ import java.util.List;
  * Реализация объектов правил, которые потребляет фильтр.
  */
 interface Rule {
-    public boolean isAcceptRule (Flight flight);
+    boolean isAcceptRule (Flight flight);
 }
 
 //Класс-шаблон для простых правил
@@ -133,7 +133,7 @@ class EarthTimeLess extends AttributedRule{
             } else {
                 delta = segAfter.minusDays(1).minusHours(segBefore.getHour()).minusMinutes(segBefore.getMinute());
             }
-            countTime += delta.getHour() + delta.getMinute()/60;
+            countTime += delta.getHour() + ((double)delta.getMinute())/60;
         }
 
         return Double.compare(hoursLess, countTime)>=0;
