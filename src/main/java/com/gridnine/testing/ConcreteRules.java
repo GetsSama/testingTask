@@ -6,7 +6,6 @@ import java.util.List;
 
 //Класс-шаблон для простых правил
 abstract class SimpleRuleImpl implements Rule {
-    protected static SimpleRuleImpl thisInstance;
     private String name;
     SimpleRuleImpl(){
         this.name = this.getClass().getSimpleName();
@@ -28,13 +27,16 @@ abstract class SimpleRuleImpl implements Rule {
 //Класс-шабон для правил с атрибутами
 abstract class AttributedRule implements Rule {
     protected Object attribute;
+    private String name;
 
     public AttributedRule(Object attr){
         this.attribute = attr;
+        this.name = this.getClass().getSimpleName();
     }
 
     @Override
     public int hashCode() {
+        System.out.println(name + " attr: " + attribute);
         return attribute.hashCode();
     }
 
@@ -57,6 +59,7 @@ abstract class AttributedRule implements Rule {
 
 //Вылет до текущего момента времени
 class DepartureBeforeNow extends SimpleRuleImpl{
+    private static DepartureBeforeNow thisInstance;
     private DepartureBeforeNow() {
         super();
     };
@@ -77,6 +80,7 @@ class DepartureBeforeNow extends SimpleRuleImpl{
 
 //Имеются сегменты с датой прилета раньше даты вылета
 class ArrivedBeforeDeparture extends SimpleRuleImpl{
+    private static ArrivedBeforeDeparture thisInstance;
     private ArrivedBeforeDeparture() { super(); }
     public static Rule getInstance() {
         if (thisInstance == null)
