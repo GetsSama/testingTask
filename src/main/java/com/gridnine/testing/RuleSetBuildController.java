@@ -81,7 +81,7 @@ class BuilderController {
     public static boolean isRulesEquals(List<String> previousRules, List<String> newRules) {
         Objects.requireNonNull(previousRules);
         Objects.requireNonNull(newRules);
-        return previousRules == newRules ? true : previousRules.equals(newRules);
+        return previousRules == newRules || previousRules.equals(newRules);
     }
 
     public static boolean doNeedBuildNewSet(List<String> previousRules, List<String> newRules) {
