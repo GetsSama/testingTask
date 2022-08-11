@@ -1,7 +1,10 @@
 package com.gridnine.testing;
 
+import com.sun.jdi.VoidValue;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Реализация фабрики, возвращающей объект правила по переданной строке с названием правила.
@@ -31,12 +34,16 @@ class RuleFactoryManager implements RuleFactory{
 
 class SimpleRuleFactory implements RuleFactory{
     private final Map<String, Integer> rulesCases = new HashMap<>(Map.of("DepartureBeforeNow", 1, "ArrivedBeforeDeparture", 2));
+    private final Map<String, Function<VoidValue, Rule>> rulesCases2 = new HashMap<>(Map.of("DepartureBeforeNow", (x) -> DepartureBeforeNow.getInstance(),
+            "ArrivedBeforeDeparture", (x)->ArrivedBeforeDeparture.getInstance()));
+
+
     private static final RuleFactory thisInstance = new SimpleRuleFactory();
     private SimpleRuleFactory(){};
     public static RuleFactory getInstance(){
         return thisInstance;
     }
-    @Override
+   /* @Override
     public Rule getRule(String ruleName) {
         if (rulesCases.get(ruleName) != null) {
             switch (rulesCases.get(ruleName)) {
@@ -50,6 +57,15 @@ class SimpleRuleFactory implements RuleFactory{
         } else {
             throw new IllegalArgumentException("There is no such rule!");
         }
+    }*/
+
+    @Override
+    public Rule getRule(String ruleName) {
+        if (rulesCases.get(ruleName) != null)
+            return rulesCases2.get(ruleName).apply(null);
+        throw new IllegalArgumentException();
+
+
     }
 }
 
