@@ -28,7 +28,7 @@ class RuleFactoryManager implements RuleFactory{
         return thisInstance;
     }
 
-    private static Map<String, Function<Void, Rule>> getSimpleRulesRealisation() {
+    public static Map<String, Function<Void, Rule>> getSimpleRulesRealisation() {
         List<Class<?>> classList = ClassFinder.find("com.gridnine.testing");
         Map<String, Function<Void, Rule>> result = new HashMap<>();
 
@@ -58,7 +58,7 @@ class RuleFactoryManager implements RuleFactory{
         return result;
     }
 
-    private static Map<String, Function<String, Rule>> getAttributedRulesRealisation() {
+    public static Map<String, Function<String, Rule>> getAttributedRulesRealisation() {
         List<Class<?>> classList = ClassFinder.find("com.gridnine.testing");
         Map<String, Function<String, Rule>> result = new HashMap<>();
 
@@ -73,7 +73,7 @@ class RuleFactoryManager implements RuleFactory{
             if (superClassName.equals("AttributedRule")) {
                 result.put(clazz.getSimpleName(), (x)-> {
                     try {
-                        return (Rule) clazz.getMethod("getInstance").invoke(null, x);
+                        return (Rule) clazz.getMethod("getInstance", String.class).invoke(null, x);
                     } catch (IllegalAccessException e) {
                         throw new RuntimeException(e);
                     } catch (InvocationTargetException e) {
@@ -105,7 +105,7 @@ class RuleFactoryManager implements RuleFactory{
 
 class SimpleRuleFactory implements RuleFactory{
     //private final Map<String, Integer> rulesCases = new HashMap<>(Map.of("DepartureBeforeNow", 1, "ArrivedBeforeDeparture", 2));
-    private static final Map<String, Function<Void, Rule>> rulesCases = RuleFactoryManager.getSimpleRulesMap();
+    private static final Map<String, Function<Void, Rule>> rulesCases = RuleFactoryManager.getSimpleRulesRealisation();
 
 
     private static final RuleFactory thisInstance = new SimpleRuleFactory();
@@ -141,7 +141,7 @@ class AttributedRuleFactory implements RuleFactory{
 
     //private final Map<String, Integer> rulesCases = new HashMap<>(Map.of("EarthTimeLess", 1));
 
-    private final Map<String, Function<String, Rule>> rulesCases = RuleFactoryManager.getAttributedRulesMap();
+    private final Map<String, Function<String, Rule>> rulesCases = RuleFactoryManager.getAttributedRulesRealisation();
     private static final RuleFactory thisInstance = new AttributedRuleFactory();
     private AttributedRuleFactory(){};
     public static RuleFactory getInstance(){
