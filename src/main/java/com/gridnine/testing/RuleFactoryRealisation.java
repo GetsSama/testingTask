@@ -17,18 +17,16 @@ interface RuleFactory{
 }
 class RuleFactoryManager implements RuleFactory{
     private static final RuleFactoryManager thisInstance = new RuleFactoryManager();
-    private static final RuleFactory simpleRuleFactory = SimpleRuleFactory.getInstance();
+    private static Map<String, Function<Void, Rule>> allSimpleRules;
+    private static Map<String, Function<String, Rule>> allAttributedRules;
+    //private static final RuleFactory simpleRuleFactory = SimpleRuleFactory.getInstance();
     private static final RuleFactory attributedRuleFactory = AttributedRuleFactory.getInstance();
-
-    private static final Map<String, Function<Void, Rule>> allSimpleRules = getSimpleRulesRealisation();
-
-    private static final Map<String, Function<String, Rule>> allAttributedRules = getAttributedRulesRealisation();
     private RuleFactoryManager(){};
     public static RuleFactory getInstance(){
         return thisInstance;
     }
 
-    public static Map<String, Function<Void, Rule>> getSimpleRulesRealisation() {
+    private static Map<String, Function<Void, Rule>> getSimpleRulesRealisation() {
         List<Class<?>> classList = ClassFinder.find("com.gridnine.testing");
         Map<String, Function<Void, Rule>> result = new HashMap<>();
 
@@ -58,7 +56,7 @@ class RuleFactoryManager implements RuleFactory{
         return result;
     }
 
-    public static Map<String, Function<String, Rule>> getAttributedRulesRealisation() {
+    private static Map<String, Function<String, Rule>> getAttributedRulesRealisation() {
         List<Class<?>> classList = ClassFinder.find("com.gridnine.testing");
         Map<String, Function<String, Rule>> result = new HashMap<>();
 
@@ -88,16 +86,20 @@ class RuleFactoryManager implements RuleFactory{
     }
 
     public static Map<String, Function<Void, Rule>> getSimpleRulesMap(){
+        if (allSimpleRules == null)
+            allSimpleRules = getSimpleRulesRealisation();
         return allSimpleRules;
     }
 
     public static Map<String, Function<String, Rule>> getAttributedRulesMap() {
+        if (allAttributedRules == null)
+            allAttributedRules = getAttributedRulesRealisation();
         return allAttributedRules;
     }
     @Override
     public Rule getRule(String ruleName) {
         if (ruleName.split(" ").length == 1)
-            return simpleRuleFactory.getRule(ruleName);
+            return SimpleRuleFactory.getInstance().getRule(ruleName);
         else
             return attributedRuleFactory.getRule(ruleName);
     }
@@ -105,7 +107,7 @@ class RuleFactoryManager implements RuleFactory{
 
 class SimpleRuleFactory implements RuleFactory{
     //private final Map<String, Integer> rulesCases = new HashMap<>(Map.of("DepartureBeforeNow", 1, "ArrivedBeforeDeparture", 2));
-    private static final Map<String, Function<Void, Rule>> rulesCases = RuleFactoryManager.getSimpleRulesRealisation();
+    private static final Map<String, Function<Void, Rule>> rulesCases = RuleFactoryManager.getSimpleRulesMap();
 
 
     private static final RuleFactory thisInstance = new SimpleRuleFactory();
@@ -141,7 +143,7 @@ class AttributedRuleFactory implements RuleFactory{
 
     //private final Map<String, Integer> rulesCases = new HashMap<>(Map.of("EarthTimeLess", 1));
 
-    private final Map<String, Function<String, Rule>> rulesCases = RuleFactoryManager.getAttributedRulesRealisation();
+    private final Map<String, Function<String, Rule>> rulesCases = RuleFactoryManager.getAttributedRulesMap();
     private static final RuleFactory thisInstance = new AttributedRuleFactory();
     private AttributedRuleFactory(){};
     public static RuleFactory getInstance(){
